@@ -12,7 +12,8 @@ It is recommended to run the project in the python virtual environment.
 $ git clone https://github.com/jacwierz/pysom2m.git
 $ cd pysom2m
 $ python3 -m venv venv
-$ source venv\bin\activte # or venv\Script\activate.bat
+$ source venv\bin\activte # or venv\Scripts\activate.bat
+$ pip3 install -r requirements.txt
 ```
 
 ## Sensor example - sdt thermometer
