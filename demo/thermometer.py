@@ -1,10 +1,14 @@
+import argparse
 import logging
 import random
 from re import A
 import signal
+import sys
 import time
+import yaml
 
 from pysom2m import Client, AE, FlexContainer, Node, MoDeviceInfo
+from yaml.loader import BaseLoader
 
 
 loop = True
@@ -19,11 +23,27 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s [ %(levelname)s ] %(name)s - %(message)s',
                         level=logging.DEBUG, filename=None)
     
+    parser = argparse.ArgumentParser(prog="thermometer")
+    parser.add_argument("--cfg", help="Path to yaml file containing application configuration. It is mandatory",
+        required=True)
+    argv = parser.parse_args()
+
+    try:
+        with open(argv.cfg, 'r') as f:
+            config = yaml.load(f, Loader=BaseLoader)
+        cse_addr = config['onem2m_server']['address']
+        cse_name = config['onem2m_server']['name']
+        originator = config['onem2m_server']['originator']
+
+    except Exception as e:
+        print("problem occurs processing configuratuin file '{}'".format(e))
+        sys.exit(2)
+
     logging.info("== Start application ==")
     signal.signal(signal.SIGINT, __sig_hnd__)
     signal.signal(signal.SIGTERM, __sig_hnd__)
 
-    cse_addr = 'http://192.168.221.4:8080'
+    # cse_addr = 'http://192.168.9.120:8090'
     device_name = 'thermometer'
     # device_id = Client.genid()
     device_id = '5a142e'
@@ -31,7 +51,7 @@ if __name__ == "__main__":
 
     local_ip = Client.get_local_ip(cse_uri=cse_addr)
     logging.info("local_ip = {}".format(local_ip))
-    client = Client(cse_addr)
+    client = Client(cse_addr, originator=originator)
 
     device_rn = "{}_{}".format(device_name, device_id)
 

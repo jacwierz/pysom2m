@@ -2,7 +2,6 @@
 
 **Note:**
 The project is under early development. Many features may not work properly or not work at all.
-Connection parameters required to reach oneM2M server are hard coded at present. :-)
 
 # Running
 
@@ -19,7 +18,7 @@ $ pip3 install -r requirements.txt
 ## Sensor example - sdt thermometer
 
 ```
-python3 -m demo.sensor
+python3 -m demo.thermometer --cfg config_example/thermometer.yaml
 ```
 
 
